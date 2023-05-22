@@ -1,22 +1,22 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from './user.repository';
-import { UserCredentialDto } from '../dto/credential.dto';
+import { AdvisorRepository } from './advisor.repository';
+import { AdvisorCredentialDto } from '../dto/credential.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../dto/login.dto';
 
 @Injectable()
-export class UserService {
+export class AdvisorService {
   constructor(
-    private userRepository: UserRepository,
+    private advisorRepository: AdvisorRepository,
     private token: JwtService,
   ) {}
 
   // 중복이메일검사
   async signUp(
-    signUpDto: UserCredentialDto,
+    signUpDto: AdvisorCredentialDto,
   ): Promise<{ message: string; statusCode: number }> {
-    return this.userRepository.createUser(signUpDto);
+    return this.advisorRepository.createAdvisor(signUpDto);
   }
 
   async logIn(
@@ -24,29 +24,29 @@ export class UserService {
   ): Promise<{ message: string; data: object; statusCode: number }> {
     const { email, password } = loginDto;
 
-    const user = await this.userRepository.findOne({ where: { email } });
+    const advisor = await this.advisorRepository.findOne({ where: { email } });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (advisor && (await bcrypt.compare(password, advisor.password))) {
       const {
         id,
         email,
         name,
         sex,
-        birth,
-        phone,
+        center,
+        info,
         loginMethod,
         created_at,
         updated_at,
-      } = user; //payload
-      console.log(user);
+      } = advisor; //payload
+      console.log(advisor);
 
       const accessToken = await this.token.sign({
         id,
         email,
         name,
         sex,
-        birth,
-        phone,
+        center,
+        info,
         loginMethod,
         created_at,
         updated_at,

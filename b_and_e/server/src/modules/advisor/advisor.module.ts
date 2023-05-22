@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { UserRepository } from './user.repository';
+import { AdvisorController } from './advisor.controller';
+import { AdvisorService } from './advisor.service';
+import { AdvisorRepository } from './advisor.repository';
 import { TypeOrmExModule } from '../typeorm-ex.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -9,7 +9,7 @@ import { JwtStrategy } from '../jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([UserRepository]),
+    TypeOrmExModule.forCustomRepository([AdvisorRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.SECRET, // 토큰을 생성하기 위해
@@ -18,8 +18,8 @@ import { JwtStrategy } from '../jwt.strategy';
       },
     }),
   ],
-  controllers: [UserController],
-  providers: [UserService, JwtStrategy, PassportModule],
+  controllers: [AdvisorController],
+  providers: [AdvisorService, JwtStrategy, PassportModule],
   exports: [JwtStrategy, PassportModule],
 })
-export class UserModule {}
+export class AdvisorModule {}

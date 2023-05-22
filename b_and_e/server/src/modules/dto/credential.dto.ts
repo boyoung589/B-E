@@ -1,6 +1,6 @@
 import { IsString, Matches, MinLength } from 'class-validator';
 
-export class UserCredentialDto {
+class CredentialDto {
   @IsString()
   @Matches(
     /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/,
@@ -28,14 +28,22 @@ export class UserCredentialDto {
   })
   sex: number;
 
+  //일반로그인 0 |카카오로그인 1
+  @Matches(/0|1/)
+  loginMethod: number;
+}
+
+export class UserCredentialDto extends CredentialDto {
   birth: string;
 
   @Matches(/^\d{2,3}-\d{3,4}-\d{4}$/, {
     message: '전화번호 형식에 맞지 않습니다.',
   })
   phone: string;
+}
 
-  //일반로그인 0 |카카오로그인 1
-  @Matches(/0|1/)
-  loginMethod: number;
+export class AdvisorCredentialDto extends CredentialDto {
+  center: string;
+
+  info: string;
 }
